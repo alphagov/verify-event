@@ -1,0 +1,11 @@
+{
+  "eventId"            : "7d20e892-2f01-4abc-b575-77b9f93c316f",
+  "timestamp"          : "2018-06-28T10:50:24+00:00",
+  "eventType"          : "session_event",
+  "originatingService" : "test",
+  "sessionId"          : "f81176c8-24f7-4622-ac61-7ebbc978bcdb",
+  "details"            : {
+    "error_id" : "7d20e892-2f01-4abc-b575-77b9f93c316z",
+    "message"  : "Session error"
+  }
+}
