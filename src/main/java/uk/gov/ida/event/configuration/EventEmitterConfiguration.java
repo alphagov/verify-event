@@ -1,4 +1,4 @@
-package uk.gov.ida.event;
+package uk.gov.ida.event.configuration;
 
 import com.amazonaws.regions.Regions;
 import com.fasterxml.jackson.annotation.JsonProperty;

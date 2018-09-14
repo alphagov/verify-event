@@ -17,10 +17,10 @@ repositories {
 dependencies {
     compile     'com.hubspot.dropwizard:dropwizard-guicier:1.0.9.1',
                 'io.dropwizard:dropwizard-core:' + dependencyVersions.dropwizard,
-                'uk.gov.ida:verify-event-emitter:0.0.1-53'
+                'uk.gov.ida:verify-event-emitter:0.0.1-56',
+                'org.postgresql:postgresql:42.2.5'
 
-    testCompile 'cloud.localstack:localstack-utils:0.1.14',
-                'io.dropwizard:dropwizard-client:' + dependencyVersions.dropwizard,
+    testCompile 'io.dropwizard:dropwizard-client:' + dependencyVersions.dropwizard,
                 'io.dropwizard:dropwizard-testing:' + dependencyVersions.dropwizard,
                 'junit:junit:4.12',
                 'nl.jqno.equalsverifier:equalsverifier:2.4.7',

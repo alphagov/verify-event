@@ -1,9 +1,9 @@
 package uk.gov.ida.event.resources;
 
-import uk.gov.ida.event.api.EventMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.ida.eventemitter.EventEmitter;
+import uk.gov.ida.eventemitter.EventMessage;
 
 import javax.inject.Inject;
 import javax.validation.Valid;

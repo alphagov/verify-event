@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import uk.gov.ida.event.configuration.EventConfiguration;
 import uk.gov.ida.eventemitter.Configuration;
 
 public class EventModule extends AbstractModule {

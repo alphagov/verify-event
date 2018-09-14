@@ -1,0 +1,14 @@
+eventEmitterConfiguration:
+  enabled: ${EVENT_EMITTER_ENABLED}
+  accessKeyId: ${EVENT_EMITTER_ACCESS_KEY_ID}
+  secretAccessKey: ${EVENT_EMITTER_SECRET_ACCESS_KEY}
+  region: eu-west-2
+  encryptionKey: ${EVENT_EMITTER_ENCRYPTION_KEY}
+  apiGatewayUrl: ${EVENT_EMITTER_API_GATEWAY_URL}
+databaseConfiguration:
+  rdsInstanceHostname: ${EVENT_STORE_HOSTNAME}
+  rdsInstancePort: ${EVENT_STORE_PORT:-5432}
+  userName: ${EVENT_STORE_USERNAME}
+  password: ${EVENT_STORE_PASSWORD}
+  database: ${EVENT_STORE_DB_NAME:-events}
+  databaseTruststorePassword: ${EVENT_STORE_DB_TRUSTSTORE_PASSWORD}

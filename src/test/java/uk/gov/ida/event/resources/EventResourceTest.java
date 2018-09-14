@@ -2,15 +2,15 @@ package uk.gov.ida.event.resources;
 
 import com.squarespace.jersey2.guice.JerseyGuiceUtils;
 import org.junit.Test;
-import uk.gov.ida.event.api.EventMessage;
 import uk.gov.ida.eventemitter.EventEmitter;
+import uk.gov.ida.eventemitter.EventMessage;
 
 import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static uk.gov.ida.event.api.EventMessageBuilder.anEventMessage;
+import static uk.gov.ida.eventemitter.EventMessageBuilder.anEventMessage;
 
 public class EventResourceTest {
 
