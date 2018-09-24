@@ -27,6 +27,10 @@ public final class EventEmitterConfiguration implements Configuration {
     private String secretAccessKey;
 
     @Valid
+    @JsonProperty
+    private String sessionToken;
+
+    @Valid
     @NotEmpty
     @JsonProperty
     private Regions region;
@@ -38,6 +42,31 @@ public final class EventEmitterConfiguration implements Configuration {
     @Valid
     @JsonProperty
     private URI apiGatewayUrl;
+
+    @Valid
+    @JsonProperty
+    private String assumeRole;
+
+    private EventEmitterConfiguration() {
+    }
+
+    public EventEmitterConfiguration(final boolean enabled,
+                                     final String accessKeyId,
+                                     final String secretAccessKey,
+                                     final Regions region,
+                                     final String encryptionKey,
+                                     final URI apiGatewayUrl,
+                                     final String assumeRole,
+                                     final String sessionToken) {
+        this.enabled = enabled;
+        this.accessKeyId = accessKeyId;
+        this.secretAccessKey = secretAccessKey;
+        this.region = region;
+        this.encryptionKey = encryptionKey;
+        this.apiGatewayUrl = apiGatewayUrl;
+        this.assumeRole = assumeRole;
+        this.sessionToken = sessionToken;
+    }
 
     @Override
     public boolean isEnabled() {
@@ -60,12 +89,20 @@ public final class EventEmitterConfiguration implements Configuration {
     }
 
     @Override
+    public byte[] getEncryptionKey() {
+        return Base64.getDecoder().decode(encryptionKey);
+    }
+
+    @Override
     public URI getApiGatewayUrl() {
         return apiGatewayUrl;
     }
 
-    @Override
-    public byte[] getEncryptionKey() {
-        return Base64.getDecoder().decode(encryptionKey);
+    public String getAssumeRole() {
+        return assumeRole;
+    }
+
+    public String getSessionToken() {
+        return sessionToken;
     }
 }

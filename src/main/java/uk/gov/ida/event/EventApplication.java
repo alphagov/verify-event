@@ -1,5 +1,6 @@
 package uk.gov.ida.event;
 
+import com.google.inject.util.Modules;
 import com.hubspot.dropwizard.guicier.GuiceBundle;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
@@ -31,7 +32,7 @@ public class EventApplication extends Application<EventConfiguration> {
                 new EnvironmentVariableSubstitutor(false)));
 
         GuiceBundle<EventConfiguration> guiceBundle = GuiceBundle.defaultBuilder(EventConfiguration.class)
-                                                                 .modules(new EventEmitterModule(), new EventModule())
+                                                                 .modules(Modules.override(new EventEmitterModule()).with(new OverrideEventEmitterModule()), new EventModule())
                                                                  .build();
         bootstrap.addBundle(guiceBundle);
     }

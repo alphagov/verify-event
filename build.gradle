@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 apply plugin: 'java'
 apply plugin: 'application'
 
@@ -18,7 +21,8 @@ dependencies {
     compile     'com.hubspot.dropwizard:dropwizard-guicier:1.0.9.1',
                 'io.dropwizard:dropwizard-core:' + dependencyVersions.dropwizard,
                 'uk.gov.ida:verify-event-emitter:0.0.1-56',
-                'org.postgresql:postgresql:42.2.5'
+                'org.postgresql:postgresql:42.2.5',
+                'com.amazonaws:aws-java-sdk-sts:1.11.277'
 
     testCompile 'io.dropwizard:dropwizard-client:' + dependencyVersions.dropwizard,
                 'io.dropwizard:dropwizard-testing:' + dependencyVersions.dropwizard,
@@ -36,6 +40,40 @@ jar {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        events  TestLogEvent.FAILED,
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.STANDARD_ERROR
+        exceptionFormat TestExceptionFormat.FULL
+        showExceptions true
+        showCauses true
+        showStackTraces true
+
+        afterSuite { desc, result ->
+            if (!desc.parent) {
+                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+                def startItem = '|  ', endItem = '  |'
+                def repeatLength = startItem.length() + output.length() + endItem.length()
+                println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+            }
+        }
+    }
+}
+
+task eventsTest(type: Test) {
+    maxHeapSize = '1024m'
+    maxParallelForks = {
+        try {
+            Integer.parseInt(System.env.JUNIT_PARALLEL_FORKS)
+        } catch(Exception _) {
+            Runtime.runtime.availableProcessors()
+        }
+    }()
+    include 'uk/gov/ida/event/integration/**'
 }
 
 

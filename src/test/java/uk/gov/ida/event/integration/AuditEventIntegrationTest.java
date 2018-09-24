@@ -6,8 +6,11 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.util.Duration;
+import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -19,6 +22,7 @@ import uk.gov.ida.eventemitter.EventHasher;
 import uk.gov.ida.eventemitter.EventMessage;
 import uk.gov.ida.eventemitter.Sha256Util;
 
+import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -37,13 +41,22 @@ public class AuditEventIntegrationTest {
 
     private static final int WAIT_FOR_RECORDER_TO_COMPLETE_PROCESSING = 75_000;
 
-    private Database database = new Database(RULE.getConfiguration(), RULE.getObjectMapper());
+    @Inject
+    private Database database;
+
+    private static ServiceLocator serviceLocator;
     private static Client client;
     private static EventHasher eventHasher = new EventHasher(new Sha256Util());
 
     @BeforeClass
     public static void beforeClass() {
         client = createAClient();
+        serviceLocator = ((ServletContainer) RULE.getEnvironment().getJerseyServletContainer()).getApplicationHandler().getServiceLocator();
+    }
+
+    @Before
+    public void setUp() {
+        serviceLocator.inject(this);
     }
 
     @Test
@@ -68,6 +81,8 @@ public class AuditEventIntegrationTest {
         assertThat(database.auditEventsTableHasEvent(expectedAuditEventMessage)).isTrue();
         assertThat(database.billingEventsTableHasEvent(expectedAuditEventMessage)).isFalse();
         assertThat(database.fraudEventsTableHasEvent(expectedAuditEventMessage)).isFalse();
+
+        database.deleteEventFromAuditEventsTable(expectedAuditEventMessage);
     }
 
     @Test
@@ -86,6 +101,9 @@ public class AuditEventIntegrationTest {
         assertThat(database.auditEventsTableHasEvent(expectedBillingEventMessage)).isTrue();
         assertThat(database.billingEventsTableHasEvent(expectedBillingEventMessage)).isTrue();
         assertThat(database.fraudEventsTableHasEvent(expectedBillingEventMessage)).isFalse();
+
+        database.deleteEventFromAuditEventsTable(expectedBillingEventMessage);
+        database.deleteEventFromBillingEventsTable(expectedBillingEventMessage);
     }
 
     @Test
@@ -104,6 +122,9 @@ public class AuditEventIntegrationTest {
         assertThat(database.auditEventsTableHasEvent(expectedFraudEventMessage)).isTrue();
         assertThat(database.billingEventsTableHasEvent(expectedFraudEventMessage)).isFalse();
         assertThat(database.fraudEventsTableHasEvent(expectedFraudEventMessage)).isTrue();
+
+        database.deleteEventFromAuditEventsTable(expectedFraudEventMessage);
+        database.deleteEventFromFraudEventsTable(expectedFraudEventMessage);
     }
 
     private EventMessage createAnAuditEventMessage() {

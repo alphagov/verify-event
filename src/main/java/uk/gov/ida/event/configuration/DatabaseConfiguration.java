@@ -40,6 +40,20 @@ public final class DatabaseConfiguration {
     private DatabaseConfiguration() {
     }
 
+    public DatabaseConfiguration(final String rdsInstanceHostname,
+                                 final String rdsInstancePort,
+                                 final String userName,
+                                 final String password,
+                                 final String database,
+                                 final String databaseTruststorePassword) {
+        this.rdsInstanceHostname = rdsInstanceHostname;
+        this.rdsInstancePort = rdsInstancePort;
+        this.userName = userName;
+        this.password = password;
+        this.database = database;
+        this.databaseTruststorePassword = databaseTruststorePassword;
+    }
+
     public String getRdsInstanceHostname() {
         return rdsInstanceHostname;
     }
